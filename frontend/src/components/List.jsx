@@ -4,10 +4,10 @@ import { ClipLoader } from "react-spinners";
 import PaypalPayment from "./PaypalPayment";
 
 const List = () => {
-  const [posts, setPosts] = useState();
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [checkout, setCheckout] = useState(false);
+  const [checkoutTaskId, setCheckoutTaskId] = useState(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -23,6 +23,11 @@ const List = () => {
     };
     getData();
   }, []);
+
+  const handleAddTaskClick = (taskId) => {
+    setCheckoutTaskId(taskId);
+  };
+
   return (
     <div className="p-7 mt-7 flex flex-col gap-7">
       <h1 className="text-center text-2xl font-semibold">Task Lists</h1>
@@ -44,17 +49,16 @@ const List = () => {
               <p>
                 Price <strong>${post.price}</strong>
               </p>
-              {checkout ? (
+              {checkoutTaskId === post.id ? (
                 <PaypalPayment />
               ) : (
                 <button
                   className="py-2 px-4 bg-blue-100 max-w-max text-lg"
-                  onClick={() => setCheckout(true)}
+                  onClick={() => handleAddTaskClick(post.id)}
                 >
                   Add Task
                 </button>
               )}
-              {/* <PayPalButtons /> */}
             </div>
           ))}
       </div>
